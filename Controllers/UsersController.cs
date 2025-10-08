@@ -72,7 +72,8 @@ namespace lms_auth_be.Controllers
             user.LastName = value.LastName;
             user.PasswordHash = hash;
             user.PasswordSalt = salt;
-            return Ok(user);
+            await usersRepo.SaveUsers(user);
+            return Ok(user.ToDto());
         }
 
         // DELETE api/<UsersController>/5
