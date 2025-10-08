@@ -8,6 +8,6 @@ public class Users
     public string UserName { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public byte[]? PasswordHash { get; set; } = null;
-    public byte[]? PasswordSalt { get; set; } = null;
+    public byte[] PasswordHash { get; set; } = [];
+    public byte[] PasswordSalt { get; set; } = [];
 }

@@ -1,4 +1,8 @@
 ﻿using lms_auth_be.Data;
+using lms_auth_be.DTOs;
+using lms_auth_be.Repositories;
+using lms_auth_be.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -7,63 +11,78 @@ namespace lms_auth_be.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUsersRepo usersRepo, SaltHashUtils saltHashUtils) : ControllerBase
     {
-        private static List<Users> users = new List<Users>();
+        public IUsersRepo usersRepo = usersRepo;
+        private SaltHashUtils saltHashUtils = saltHashUtils;
 
         // GET: api/<UsersController>
         [HttpGet]
-        public ActionResult<IEnumerable<Users>> Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(users);
+            var users = await usersRepo.GetAll();
+            return Ok(users.Select(users => users.ToDto()));
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{username}")]
-        public IActionResult Get(string username)
+        public async Task<IActionResult> Get(string username)
         {
-            var user = users.FirstOrDefault(u => u.UserName == username);
-            if (user == null) return NotFound();
-            return Ok(user);
+            var user = await usersRepo.GetByUserName(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user.ToDto());
         }
 
-        // POST api/<UsersController>
         [HttpPost]
-        public IActionResult Post([FromBody] Users value)
+        public async Task<IActionResult> Post([FromBody] CreateUsersDtos value)
         {
-            var user = users.FirstOrDefault(u => u.UserName == value.UserName);
-            if (user != null) return BadRequest(new { message = "User with supplied username already exists." });
-            users.Add(new Users {
+            var existingUser = await usersRepo.GetByUserName(value.UserName);
+            if (existingUser != null)
+                return BadRequest(new { message = "Username already exists." });
+
+            var (hash, salt) = saltHashUtils.HashPassword(value.Password);
+
+            var user = new Users
+            {
                 UserName = value.UserName,
                 FirstName = value.FirstName,
                 LastName = value.LastName,
-                PasswordHash = value.PasswordHash,
-                PasswordSalt = value.PasswordSalt,
-            });
+                PasswordHash = hash,
+                PasswordSalt = salt
+            };
 
-            return NoContent();
+            // Save the user
+            await usersRepo.InsertUsersAsync(user);
+
+            return CreatedAtAction(nameof(Get), new { username = user.UserName }, user.ToDto());
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{username}")]
-        public IActionResult Put(string username, [FromBody] Users value)
+        public async Task<IActionResult> Put(string username, [FromBody] UpdateUsersDtos value)
         {
-            var user = users.FirstOrDefault(u => u.UserName == value.UserName);
+            var (hash, salt) = saltHashUtils.HashPassword(value.Password);
+            var user = await usersRepo.GetByUserName(username);
             if (user == null) return NotFound();
             user.FirstName = value.FirstName;
             user.LastName = value.LastName;
-            user.PasswordHash = value.PasswordHash;
-            user.PasswordSalt = value.PasswordSalt;
-            return Ok(user);
+            user.PasswordHash = hash;
+            user.PasswordSalt = salt;
+            await usersRepo.SaveUsers(user);
+            return Ok(user.ToDto());
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{username}")]
-        public IActionResult Delete(string username)
+        public async Task<IActionResult> Delete(string username)
         {
-            var user = users.FirstOrDefault(u => u.UserName == username);
+            var user = await usersRepo.GetByUserName(username);
             if (user == null) return NotFound();
-            users.Remove(user);
+            await usersRepo.DeleteUsers(user);
             return NoContent();
         }
     }
