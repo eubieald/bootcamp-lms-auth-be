@@ -1,5 +1,6 @@
 using lms_auth_be.DBContext;
 using lms_auth_be.Repositories;
+using lms_auth_be.Utils;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UsersDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("mssql")));
 builder.Services.AddScoped<IUsersRepo, UsersRepo>();
-
+builder.Services.AddScoped<SaltHashUtils>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
