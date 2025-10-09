@@ -20,6 +20,7 @@ public class JwtUtils
         var key = _configuration["Jwt:Key"];
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
+        var expiration = _configuration["Jwt:ExpireMinutes"] ?? "60";
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -29,14 +30,14 @@ public class JwtUtils
             new Claim(JwtRegisteredClaimNames.Sub, userName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Name, userName),
-            new Claim(ClaimTypes.Role, role.ToString())
+            new Claim(ClaimTypes.Role, role.ToString()),
         };
 
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
             claims: claims,
-            expires: DateTime.Now.AddHours(3),
+            expires: DateTime.Now.AddMinutes(Double.Parse(expiration)),
             signingCredentials: credentials
         );
 
