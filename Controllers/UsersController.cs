@@ -2,6 +2,7 @@
 using lms_auth_be.DTOs;
 using lms_auth_be.Repositories;
 using lms_auth_be.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace lms_auth_be.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles ="Admin")]
     [ApiController]
     public class UsersController(IUsersRepo usersRepo, SaltHashUtils saltHashUtils) : ControllerBase
     {
