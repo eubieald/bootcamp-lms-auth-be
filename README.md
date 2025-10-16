@@ -25,8 +25,7 @@ This backend service is a critical component of a modular LMS architecture. It f
 ---
 
 ## 📁 Project Structure
-
-<pre>
+---
 bootcamp-lms-auth-be/
 ├── Controllers/           # API endpoints (e.g., AuthController)
 ├── DTOs/                  # Data Transfer Objects
@@ -39,8 +38,6 @@ bootcamp-lms-auth-be/
 ├── Program.cs             # Application startup and configuration
 ├── appsettings.json       # Main configuration file
 └── lms-auth-be.sln        # Visual Studio solution file
-</pre>
-
 ---
 
 ## 🚀 Getting Started
