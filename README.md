@@ -130,6 +130,5 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 ## 🙏 Acknowledgments
-
-Created as part of a bootcamp capstone project to explore clean backend architecture and secure authentication practices using ASP.NET Core.
+* [@rchristianandrei](https://github.com/rchristianandrei)
 ```
