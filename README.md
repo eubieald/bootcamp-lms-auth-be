@@ -134,16 +134,4 @@ Developed by:
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 🙏 Acknowledgments
-
-Built as part of a team project during a software development bootcamp. Special thanks to instructors and reviewers who helped shape this codebase.
-
-```
-
----
-
-Let me know if you'd like a matching `Dockerfile`, `.env` template, or Swagger setup to go along with this backend.
 ```
