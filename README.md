@@ -1,7 +1,3 @@
-You're right — the previous `README.md` cut off slightly near the end. Here's the **complete and finalized version**, ready to use for your GitHub repository [`bootcamp-lms-auth-be`](https://github.com/eubieald/bootcamp-lms-auth-be):
-
----
-
 ```md
 # Bootcamp LMS Auth Backend
 
