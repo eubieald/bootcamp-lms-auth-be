@@ -1,4 +1,4 @@
-```md
+````md
 # Bootcamp LMS Auth Backend
 
 A foundational authentication and authorization API built with **ASP.NET Core**, **C#**, and **Microsoft SQL Server**. This service handles user registration, login, role-based access control, and token issuance for a Bootcamp Learning Management System.
@@ -13,35 +13,33 @@ This backend service is a critical component of a modular LMS architecture. It f
 
 ## 🔧 Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | ASP.NET Core Web API |
-| Language | C# |
-| Database | Microsoft SQL Server |
-| ORM | Entity Framework Core |
-| Auth | JWT (JSON Web Tokens) |
-| Config | appsettings.json / appsettings.Development.json |
+| Layer       | Technology             |
+|-------------|------------------------|
+| Framework   | ASP.NET Core Web API   |
+| Language    | C#                     |
+| Database    | Microsoft SQL Server   |
+| ORM         | Entity Framework Core  |
+| Auth        | JWT (JSON Web Tokens)  |
+| Config      | appsettings.json       |
 
 ---
 
 ## 📁 Project Structure
 
-```
-
+<pre>
 bootcamp-lms-auth-be/
-├── Controllers/         # API endpoints (e.g. AuthController)
-├── DTOs/                # Data Transfer Objects
-├── DBContext/           # EF Core DbContext
-├── Data/                # Seed data, user entity
-├── Enums/               # Role definitions
-├── Repositories/        # Interfaces and implementations for DB access
-├── Utils/               # Helpers (e.g. password hashing, token generation)
-├── Migrations/          # EF Core database migrations
-├── Program.cs           # Entry point and configuration
-├── appsettings.json     # Main configuration
-├── lms-auth-be.sln      # Solution file
-
-````
+├── Controllers/           # API endpoints (e.g., AuthController)
+├── DTOs/                  # Data Transfer Objects
+├── DBContext/             # EF Core DbContext
+├── Data/                  # Seed data and user entity
+├── Enums/                 # User role definitions
+├── Repositories/          # Interfaces and implementations for data access
+├── Utils/                 # Helper classes (e.g., JWT generator, password hasher)
+├── Migrations/            # EF Core database migrations
+├── Program.cs             # Application startup and configuration
+├── appsettings.json       # Main configuration file
+└── lms-auth-be.sln        # Visual Studio solution file
+</pre>
 
 ---
 
@@ -55,7 +53,7 @@ bootcamp-lms-auth-be/
 
 ### Environment Configuration
 
-Update `appsettings.Development.json` and `appsettings.json` with your local DB connection string and JWT settings:
+Update `appsettings.Development.json` or `appsettings.json` with your local DB connection string and JWT settings:
 
 ```json
 {
@@ -79,41 +77,42 @@ dotnet ef database update
 dotnet run
 ```
 
-Visit: `https://localhost:5001/swagger` (if Swagger is enabled) to test endpoints.
+Open your browser or Postman and test via:
+`https://localhost:5001/swagger` (if Swagger is enabled)
 
 ---
 
 ## 🔐 Authentication Features
 
-* ✅ **User Signup** (with hashed passwords)
-* ✅ **Login** (JWT token returned)
-* ✅ **Role-Based Access Control** (`Student`, `Instructor`, `Admin`)
-* ✅ **Secure Endpoints with Authorization**
-* ✅ **Token generation via utility helper**
+* ✅ User registration (with password hashing)
+* ✅ Login with JWT token issuance
+* ✅ Role-based authorization (`Student`, `Instructor`, `Admin`)
+* ✅ Secure route protection via policies
+* ✅ Token generation and validation using utilities
 
 ---
 
 ## 🧪 Testing the API
 
-Use the provided `lms-auth-be.http` file or Swagger UI to send HTTP requests:
+Use Swagger, Postman, or the `lms-auth-be.http` file to test:
 
 * `POST /api/auth/register`
 * `POST /api/auth/login`
-* `GET /api/user/profile` (JWT required)
-* Additional protected endpoints can be tested by attaching the token as a bearer in headers.
+* `GET /api/user/profile` *(requires Bearer token)*
+* Add token in headers to access protected routes.
 
 ---
 
 ## 🧭 Future Improvements
 
 * 🔄 Refresh token support
-* 📧 Email confirmation during signup
-* 🔐 Forgot password / password reset flow
+* 📧 Email confirmation flow
+* 🔐 Forgot password / reset password
 * 🧪 Add unit and integration tests
-* 🔍 Swagger UI integration
-* 🐳 Dockerfile and container support
-* 🚀 CI/CD integration for production deployment
-* 🛡 Rate limiting and brute force protection
+* 🔍 Add Swagger UI with JWT auth
+* 🐳 Add Dockerfile for container support
+* 🚀 CI/CD pipeline integration
+* 🛡 Rate limiting and brute-force protection
 
 ---
 
@@ -130,4 +129,10 @@ Developed by:
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Acknowledgments
+
+Created as part of a bootcamp capstone project to explore clean backend architecture and secure authentication practices using ASP.NET Core.
 ```
