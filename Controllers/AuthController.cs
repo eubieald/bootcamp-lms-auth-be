@@ -29,10 +29,17 @@ namespace lms_auth_be.Controllers
 
             var userDto = user.ToDto();
 
+            Response.Cookies.Append("Authorization", token, new CookieOptions
+            {
+                HttpOnly = true, // prevents JS from reading it
+                Secure = false,  // set true if using HTTPS in dev/production
+                SameSite = SameSiteMode.Lax, // Lax works for dev; adjust if needed
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
             return Ok(new
             {
                 message = "Login successful.",
-                token,
                 user = userDto
             });
         }
