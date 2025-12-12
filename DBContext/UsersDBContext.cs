@@ -10,6 +10,9 @@ public class UsersDBContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Admin> Admins { get; set; }
+    public DbSet<Teacher> Teachers { get; set; }
+    public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<EnrolledCourse> EnrolledCourses { get; set; }
     public DbSet<Data.Task> Tasks { get; set; }
@@ -60,5 +63,26 @@ public class UsersDBContext : DbContext
             .WithMany(x => x.Submissions)
             .HasForeignKey(x => x.EnrolledCourseId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Admin to User
+        modelBuilder.Entity<Admin>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.Admin)
+            .HasForeignKey<Admin>(x => x.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Teacher to User
+        modelBuilder.Entity<Teacher>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.Teacher)
+            .HasForeignKey<Teacher>(x => x.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Student to User
+        modelBuilder.Entity<Student>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.Student)
+            .HasForeignKey<Student>(x => x.Id)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -12,7 +12,7 @@ using lms_auth_be.DBContext;
 namespace lms_auth_be.Migrations
 {
     [DbContext(typeof(UsersDBContext))]
-    [Migration("20251212082409_InitialSchema")]
+    [Migration("20251212084710_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -24,6 +24,19 @@ namespace lms_auth_be.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("lms_auth_be.Data.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
 
             modelBuilder.Entity("lms_auth_be.Data.Course", b =>
                 {
@@ -81,6 +94,19 @@ namespace lms_auth_be.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("EnrolledCourses");
+                });
+
+            modelBuilder.Entity("lms_auth_be.Data.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("lms_auth_be.Data.Submission", b =>
@@ -153,6 +179,19 @@ namespace lms_auth_be.Migrations
                     b.ToTable("Tasks");
                 });
 
+            modelBuilder.Entity("lms_auth_be.Data.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers");
+                });
+
             modelBuilder.Entity("lms_auth_be.Data.User", b =>
                 {
                     b.Property<int>("Id")
@@ -193,6 +232,17 @@ namespace lms_auth_be.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("lms_auth_be.Data.Admin", b =>
+                {
+                    b.HasOne("lms_auth_be.Data.User", "User")
+                        .WithOne("Admin")
+                        .HasForeignKey("lms_auth_be.Data.Admin", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("lms_auth_be.Data.Course", b =>
                 {
                     b.HasOne("lms_auth_be.Data.User", "Owner")
@@ -221,6 +271,17 @@ namespace lms_auth_be.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("lms_auth_be.Data.Student", b =>
+                {
+                    b.HasOne("lms_auth_be.Data.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("lms_auth_be.Data.Student", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("lms_auth_be.Data.Submission", b =>
@@ -253,6 +314,17 @@ namespace lms_auth_be.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("lms_auth_be.Data.Teacher", b =>
+                {
+                    b.HasOne("lms_auth_be.Data.User", "User")
+                        .WithOne("Teacher")
+                        .HasForeignKey("lms_auth_be.Data.Teacher", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("lms_auth_be.Data.Course", b =>
                 {
                     b.Navigation("Enrolled");
@@ -272,9 +344,15 @@ namespace lms_auth_be.Migrations
 
             modelBuilder.Entity("lms_auth_be.Data.User", b =>
                 {
+                    b.Navigation("Admin");
+
                     b.Navigation("EnrolledCourses");
 
                     b.Navigation("OwnedCourses");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 #pragma warning restore 612, 618
         }

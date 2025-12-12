@@ -22,4 +22,10 @@ public class User
     public List<Course>? OwnedCourses { get; set; }
 
     public List<EnrolledCourse>? EnrolledCourses { get; set; }
+
+    public Admin? Admin { get; set; }
+
+    public Teacher? Teacher { get; set; }
+
+    public Student? Student { get; set; }
 }
