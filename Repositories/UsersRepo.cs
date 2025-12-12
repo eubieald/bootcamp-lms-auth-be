@@ -12,25 +12,25 @@ namespace lms_auth_be.Repositories
         {
             this._dbContext = context;
         }
-        public async Task<List<Users>> GetAll() => await this._dbContext.Users.ToListAsync();
+        public async Task<List<User>> GetAll() => await this._dbContext.Users.ToListAsync();
 
-        public async Task<Users?> GetByUserName(string username)
+        public async Task<User?> GetByUserName(string username)
         {
             return await this._dbContext.Users.FindAsync(username);
         }
 
-        public async Task InsertUsersAsync(Users user)
+        public async System.Threading.Tasks.Task InsertUsersAsync(User user)
         {
             await this._dbContext.Users.AddAsync(user);
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task SaveUsers(Users user)
+        public async System.Threading.Tasks.Task SaveUsers(User user)
         {
             await this._dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteUsers(Users user)
+        public async System.Threading.Tasks.Task DeleteUsers(User user)
         {
             this._dbContext.Users.Remove(user);
             await this._dbContext.SaveChangesAsync();

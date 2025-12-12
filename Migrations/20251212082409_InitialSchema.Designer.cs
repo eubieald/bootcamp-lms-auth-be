@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lms_auth_be.DBContext;
 
@@ -11,9 +12,11 @@ using lms_auth_be.DBContext;
 namespace lms_auth_be.Migrations
 {
     [DbContext(typeof(UsersDBContext))]
-    partial class UsersDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251212082409_InitialSchema")]
+    partial class InitialSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

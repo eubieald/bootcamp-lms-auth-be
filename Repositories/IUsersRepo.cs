@@ -4,10 +4,10 @@ namespace lms_auth_be.Repositories
 {
     public interface IUsersRepo
     {
-        Task DeleteUsers(Users user);
-        Task<List<Users>> GetAll();
-        Task<Users?> GetByUserName(string username);
-        Task InsertUsersAsync(Users user);
-        Task SaveUsers(Users user);
+        System.Threading.Tasks.Task DeleteUsers(User user);
+        Task<List<User>> GetAll();
+        Task<User?> GetByUserName(string username);
+        System.Threading.Tasks.Task InsertUsersAsync(User user);
+        System.Threading.Tasks.Task SaveUsers(User user);
     }
 }

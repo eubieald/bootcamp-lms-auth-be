@@ -48,7 +48,7 @@ namespace lms_auth_be.Controllers
 
             var (hash, salt) = saltHashUtils.HashPassword(value.Password);
 
-            var user = new Users
+            var user = new User
             {
                 UserName = value.UserName,
                 FirstName = value.FirstName,
