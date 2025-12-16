@@ -7,7 +7,7 @@ namespace lms_auth_be.Utils
         private const int SaltSize = 16;      // 128-bit salt
         private const int KeySize = 32;       // 256-bit derived key
         private const int Iterations = 10000; // PBKDF2 iterations
-    public (byte[] Hash, byte[] Salt) HashPassword(string password)
+        public (byte[] Hash, byte[] Salt) HashPassword(string password)
         {
             // salting
             byte[] salt = new byte[SaltSize];
