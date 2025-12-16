@@ -5,6 +5,6 @@ public static class UsersDtosHelper
 {
     public static UsersDtos ToDto(this User users)
     {
-        return new UsersDtos(users.UserName, users.FirstName, users.LastName);
+        return new UsersDtos(users.Email, users.FirstName, users.LastName);
     }
 }

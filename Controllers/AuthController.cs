@@ -25,7 +25,7 @@ namespace lms_auth_be.Controllers
             if (!isValid)
                 return Unauthorized(new { message = "Invalid username or password." });
 
-            var token = _jwtUtils.GenerateToken(user.UserName);
+            var token = _jwtUtils.GenerateToken(user.Email);
 
             var userDto = user.ToDto();
 

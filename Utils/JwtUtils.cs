@@ -15,21 +15,21 @@ public class JwtUtils
         _configuration = configuration;
     }
 
-    public string GenerateToken(string userName, UserRoleEnums role = UserRoleEnums.Admin)
+    public string GenerateToken(string email, UserRoleEnums role = UserRoleEnums.Admin)
     {
         var key = _configuration["Jwt:Key"];
         var issuer = _configuration["Jwt:Issuer"];
         var audience = _configuration["Jwt:Audience"];
         var expiration = _configuration["Jwt:ExpireMinutes"] ?? "60";
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key ?? throw new InvalidOperationException("Missing JWT Key")));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
+            new Claim(JwtRegisteredClaimNames.Sub, email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, userName),
+            new Claim(ClaimTypes.Name, email),
             new Claim(ClaimTypes.Role, role.ToString()),
         };
 

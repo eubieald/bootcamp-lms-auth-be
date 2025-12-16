@@ -42,7 +42,7 @@ namespace lms_auth_be.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUsersDtos value)
         {
-            var existingUser = await usersRepo.GetByUserName(value.UserName);
+            var existingUser = await usersRepo.GetByUserName(value.Email);
             if (existingUser != null)
                 return BadRequest(new { message = "Username already exists." });
 
@@ -50,7 +50,7 @@ namespace lms_auth_be.Controllers
 
             var user = new User
             {
-                UserName = value.UserName,
+                Email = value.Email,
                 FirstName = value.FirstName,
                 LastName = value.LastName,
                 PasswordHash = hash,
@@ -60,7 +60,7 @@ namespace lms_auth_be.Controllers
             // Save the user
             await usersRepo.InsertUsersAsync(user);
 
-            return CreatedAtAction(nameof(Get), new { username = user.UserName }, user.ToDto());
+            return CreatedAtAction(nameof(Get), new { Email = user.Email }, user.ToDto());
         }
 
         // PUT api/<UsersController>/5

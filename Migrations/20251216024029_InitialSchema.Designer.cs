@@ -12,7 +12,7 @@ using lms_auth_be.DBContext;
 namespace lms_auth_be.Migrations
 {
     [DbContext(typeof(UsersDBContext))]
-    [Migration("20251212084710_InitialSchema")]
+    [Migration("20251216024029_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -222,10 +222,6 @@ namespace lms_auth_be.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
