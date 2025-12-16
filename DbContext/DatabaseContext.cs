@@ -4,7 +4,7 @@ using lms_auth_be.DBContext.Configurations;
 
 namespace lms_auth_be.DBContext;
 
-public class UsersDBContext(DbContextOptions<UsersDBContext> options) : DbContext(options)
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Admin> Admins { get; set; }

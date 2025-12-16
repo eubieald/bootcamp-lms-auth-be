@@ -11,7 +11,7 @@ using lms_auth_be.DBContext;
 
 namespace lms_auth_be.Migrations
 {
-    [DbContext(typeof(UsersDBContext))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20251216024029_InitialSchema")]
     partial class InitialSchema
     {

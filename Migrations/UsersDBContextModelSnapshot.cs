@@ -10,7 +10,7 @@ using lms_auth_be.DBContext;
 
 namespace lms_auth_be.Migrations
 {
-    [DbContext(typeof(UsersDBContext))]
+    [DbContext(typeof(DatabaseContext))]
     partial class UsersDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using lms_auth_be.Data;
 using lms_auth_be.Enums;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,7 +16,7 @@ public class JwtUtils
         _configuration = configuration;
     }
 
-    public string GenerateToken(string email, UserRoleEnums role = UserRoleEnums.Admin)
+    public string GenerateToken(User user, UserRoleEnums role = UserRoleEnums.Admin)
     {
         var key = _configuration["Jwt:Key"];
         var issuer = _configuration["Jwt:Issuer"];
@@ -27,9 +28,9 @@ public class JwtUtils
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, email),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, email),
+            new Claim(ClaimTypes.Name, $"{user.LastName}, {user.FirstName}"),
             new Claim(ClaimTypes.Role, role.ToString()),
         };
 
