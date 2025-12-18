@@ -7,9 +7,9 @@ namespace lms_auth_be.Repositories;
 
 public class UsersRepo(DatabaseContext dbContext, DbSet<User> table) : GenericRepo<User>(dbContext, table), IUsersRepo
 {
-    public async Task<User?> GetByEmail(string username)
+    public async Task<User?> GetByEmail(string email)
     {
-        return await this.table.FindAsync(username);
+        return await this.table.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task InsertUsersAsync(User user)

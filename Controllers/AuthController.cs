@@ -3,6 +3,7 @@ using lms_auth_be.DTOs;
 using lms_auth_be.Interfaces;
 using lms_auth_be.Mapper;
 using lms_auth_be.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace lms_auth_be.Controllers;
@@ -49,6 +50,7 @@ public class AuthController(
         });
     }
 
+    [Authorize]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterAuthDtos registerDto)
     {
@@ -62,7 +64,7 @@ public class AuthController(
 
         var user = new User
         {
-            Email = registerDto.Email,
+            Email = registerDto.Email.ToLower(),
             FirstName = registerDto.FirstName,
             LastName = registerDto.LastName,
             PasswordHash = hash,
