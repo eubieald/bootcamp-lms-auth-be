@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace lms_auth_be.Repositories;
+namespace lms_auth_be.Interfaces;
 
 public interface IGenericRepo<T> where T : class
 {

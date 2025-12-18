@@ -16,5 +16,5 @@ public class Course
 
     public List<EnrolledCourse>? Enrolled { get; set; }
 
-    public List<Task>? Tasks { get; set; }
+    public List<Tasks>? Tasks { get; set; }
 }

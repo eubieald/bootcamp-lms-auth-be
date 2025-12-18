@@ -1,5 +1,7 @@
-﻿using lms_auth_be.Data;
+﻿using lms_auth_be;
+using lms_auth_be.Data;
 using lms_auth_be.DBContext;
+using lms_auth_be.Interfaces;
 using lms_auth_be.Repositories;
 using lms_auth_be.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -63,11 +65,7 @@ builder.Services.AddSwaggerGen(c => {
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("mssql")));
 
-builder.Services.AddScoped<IGenericRepo<Course>, GenericRepo<Course>>(provider =>
-{
-    var context = provider.GetRequiredService<DatabaseContext>();
-    return new GenericRepo<Course>(context, context.Courses);
-});
+builder.Services.AddRepositories();
 
 // =======================================
 // 🔐 Configure JWT Authentication
@@ -102,7 +100,7 @@ builder.Services.AddAuthentication(options =>
             {
                 context.Token = context.Request.Cookies["Authorization"];
             }
-            return Task.CompletedTask;
+            return System.Threading.Tasks.Task.CompletedTask;
         }
     };
 });
@@ -110,7 +108,6 @@ builder.Services.AddAuthentication(options =>
 // =======================================
 // 💡 Add Scoped Services
 // =======================================
-builder.Services.AddScoped<IUsersRepo, UsersRepo>();
 builder.Services.AddScoped<SaltHashUtils>();
 builder.Services.AddScoped<JwtUtils>();
 

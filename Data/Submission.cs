@@ -6,7 +6,7 @@ public class Submission
 
     public int TaskId { get; set; }
 
-    public Task? Task { get; set; }
+    public Tasks? Task { get; set; }
 
     public int EnrolledCourseId { get; set; }
 

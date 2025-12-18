@@ -1,11 +1,9 @@
 ﻿using lms_auth_be.Data;
 using lms_auth_be.DTOs;
-using lms_auth_be.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
+using lms_auth_be.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace lms_auth_be.Controllers;
 
@@ -29,7 +27,6 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
         return Ok(entity);
     }
 
-    // POST api/<CoursesController>
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateCourseDTO value)
     {
@@ -54,13 +51,11 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
         return NoContent();
     }
 
-    // PUT api/<CoursesController>/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
     {
     }
 
-    // DELETE api/<CoursesController>/5
     [HttpDelete("{id}")]
     public void Delete(int id)
     {

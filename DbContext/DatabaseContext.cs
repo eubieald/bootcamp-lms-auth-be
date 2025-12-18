@@ -12,7 +12,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<EnrolledCourse> EnrolledCourses { get; set; }
-    public DbSet<Data.Task> Tasks { get; set; }
+    public DbSet<Data.Tasks> Tasks { get; set; }
     public DbSet<Submission> Submissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

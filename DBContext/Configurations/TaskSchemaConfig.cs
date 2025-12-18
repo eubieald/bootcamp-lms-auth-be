@@ -7,7 +7,7 @@ public static class TaskSchemaConfig
     public static ModelBuilder AddTaskSchemaConfig(this ModelBuilder modelBuilder)
     {
         // Task to Course
-        modelBuilder.Entity<Data.Task>()
+        modelBuilder.Entity<Data.Tasks>()
             .HasOne(x => x.Course)
             .WithMany(x => x.Tasks)
             .HasForeignKey(x => x.CourseId)

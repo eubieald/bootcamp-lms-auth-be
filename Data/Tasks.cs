@@ -1,6 +1,6 @@
 ﻿namespace lms_auth_be.Data;
 
-public class Task
+public class Tasks
 {
     public int Id { get; set; }
 

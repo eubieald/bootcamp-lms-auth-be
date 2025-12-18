@@ -1,13 +1,14 @@
 ﻿using lms_auth_be.DBContext;
+using lms_auth_be.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace lms_auth_be.Repositories;
 
-public class GenericRepo<T>(DatabaseContext dbContext, DbSet<T> table) : IGenericRepo<T> where T : class
+public abstract class GenericRepo<T>(DatabaseContext dbContext, DbSet<T> table) : IGenericRepo<T> where T : class
 {
-    private readonly DatabaseContext dbContext = dbContext;
-    private readonly DbSet<T> table = table;
+    protected readonly DatabaseContext dbContext = dbContext;
+    protected readonly DbSet<T> table = table;
 
     public async Task Create(T entity)
     {
