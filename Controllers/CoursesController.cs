@@ -1,6 +1,7 @@
 ﻿using lms_auth_be.Data;
 using lms_auth_be.DTOs;
 using lms_auth_be.Interfaces;
+using lms_auth_be.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,7 +17,8 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await this.courseRepo.GetAll());
+        var list = await this.courseRepo.GetAll();
+        return Ok(list.Select(c => c.ToDTO()));
     }
 
     [HttpGet("{id}")]
@@ -24,7 +26,7 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
     {
         var entity = await this.courseRepo.GetById(id);
         if (entity == null) return NotFound();
-        return Ok(entity);
+        return Ok(entity.ToDTO());
     }
 
     [HttpPost]
