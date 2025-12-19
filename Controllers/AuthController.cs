@@ -3,6 +3,7 @@ using lms_auth_be.Data;
 using lms_auth_be.DTOs;
 using lms_auth_be.Interfaces;
 using lms_auth_be.Mapper;
+using lms_auth_be.Repositories;
 using lms_auth_be.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,18 @@ namespace lms_auth_be.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController(
-    IUsersRepo usersRepo, 
-    SaltHashUtils saltHashUtils, 
+    IUsersRepo usersRepo,
+    AdminRepo adminsRepo,
+    TeacherRepo teachersRepo,
+    StudentRepo studentsRepo,
+    SaltHashUtils saltHashUtils,
     JwtUtils jwtUtils
 ) : ControllerBase
 {
     private readonly IUsersRepo usersRepo = usersRepo;
+    private readonly AdminRepo adminsRepo = adminsRepo;
+    private readonly TeacherRepo teachersRepo = teachersRepo;
+    private readonly StudentRepo studentsRepo = studentsRepo;
     private readonly SaltHashUtils saltHashUtils = saltHashUtils;
     private readonly JwtUtils jwtUtils = jwtUtils;
 
@@ -54,7 +61,12 @@ public class AuthController(
     [Authorize]
     [Transactional]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterAuthDtos registerDto)
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterAuthDtos registerDto,
+        [FromQuery] bool admin = false,
+        [FromQuery] bool teacher = false,
+        [FromQuery] bool student = false
+    )
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -75,6 +87,34 @@ public class AuthController(
         };
 
         await this.usersRepo.CreateAsync(user);
+
+        if (admin)
+        {
+            await this.adminsRepo.CreateAsync(new Admin
+            {
+                User = user,
+                DateTimeCreated = DateTime.Now
+            });
+        }
+
+        if (teacher)
+        {
+            await this.teachersRepo.CreateAsync(new Teacher
+            {
+                User = user,
+                DateTimeCreated = DateTime.Now
+            });
+        }
+
+
+        if((!admin && !teacher) || student)
+        {
+            await this.studentsRepo.CreateAsync(new Student
+            {
+                User = user,
+                DateTimeCreated = DateTime.Now
+            });
+        }
 
         return CreatedAtAction(nameof(Register), new { user.Email }, user.ToDto());
     }

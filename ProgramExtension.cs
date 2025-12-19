@@ -9,6 +9,9 @@ public static class ProgramExtension
     {
         services.AddScoped<IUsersRepo, UsersRepo>();
         services.AddScoped<ICourseRepo, CourseRepo>();
+        services.AddScoped<IAdminRepo, AdminRepo>();
+        services.AddScoped<ITeacherRepo, TeacherRepo>();
+        services.AddScoped<IStudentRepo, StudentRepo>();
 
         return services;
     }
