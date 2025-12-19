@@ -48,7 +48,7 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
             DateTimeCreated = DateTime.Now,
         };
 
-        await this.courseRepo.Create(course);
+        await this.courseRepo.CreateAsync(course);
 
         return NoContent();
     }

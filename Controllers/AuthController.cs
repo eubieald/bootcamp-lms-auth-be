@@ -1,4 +1,5 @@
-﻿using lms_auth_be.Data;
+﻿using lms_auth_be.ActionFilters;
+using lms_auth_be.Data;
 using lms_auth_be.DTOs;
 using lms_auth_be.Interfaces;
 using lms_auth_be.Mapper;
@@ -51,6 +52,7 @@ public class AuthController(
     }
 
     [Authorize]
+    [Transactional]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterAuthDtos registerDto)
     {
@@ -68,10 +70,11 @@ public class AuthController(
             FirstName = registerDto.FirstName,
             LastName = registerDto.LastName,
             PasswordHash = hash,
-            PasswordSalt = salt
+            PasswordSalt = salt,
+            DateTimeCreated = DateTime.Now
         };
 
-        await this.usersRepo.InsertUsersAsync(user);
+        await this.usersRepo.CreateAsync(user);
 
         return CreatedAtAction(nameof(Register), new { user.Email }, user.ToDto());
     }

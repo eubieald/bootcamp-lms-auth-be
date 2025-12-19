@@ -5,18 +5,19 @@ using System.Linq.Expressions;
 
 namespace lms_auth_be.Repositories;
 
-public abstract class GenericRepo<T>(DatabaseContext dbContext, DbSet<T> table) : IGenericRepo<T> where T : class
+public abstract class GenericRepo<T>(DatabaseContext dbContext) : IGenericRepo<T> where T : class
 {
     protected readonly DatabaseContext dbContext = dbContext;
-    protected readonly DbSet<T> table = table;
+    protected readonly DbSet<T> table = dbContext.Set<T>();
 
-    public async Task Create(T entity)
+    public async Task CreateAsync(T entity)
     {
+        Console.WriteLine($"Repo: {dbContext.ContextId}");
         await this.table.AddAsync(entity);
         await this.dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteById(T entity)
+    public async Task DeleteAsync(T entity)
     {
         this.table.Remove(entity);
         await this.dbContext.SaveChangesAsync();

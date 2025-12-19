@@ -36,7 +36,7 @@ public class UsersController(IUsersRepo usersRepo) : ControllerBase
     {
         var user = await usersRepo.GetByEmail(username);
         if (user == null) return NotFound();
-        await usersRepo.DeleteUser(user);
+        await usersRepo.DeleteAsync(user);
         return NoContent();
     }
 }

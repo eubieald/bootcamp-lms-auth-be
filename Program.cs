@@ -1,8 +1,5 @@
 ﻿using lms_auth_be;
-using lms_auth_be.Data;
 using lms_auth_be.DBContext;
-using lms_auth_be.Interfaces;
-using lms_auth_be.Repositories;
 using lms_auth_be.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
