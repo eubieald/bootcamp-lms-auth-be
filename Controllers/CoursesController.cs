@@ -24,7 +24,7 @@ public class CoursesController(IGenericRepo<Course> courseRepo) : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var entity = await this.courseRepo.GetById(id);
+        var entity = await this.courseRepo.GetByIdAsync(id);
         if (entity == null) return NotFound();
         return Ok(entity.ToDTO());
     }

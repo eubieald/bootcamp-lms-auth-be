@@ -3,18 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using lms_auth_be.Data;
 using lms_auth_be.Enums;
+using lms_auth_be.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace lms_auth_be.Utils;
+namespace lms_auth_be.Services;
 
-public class JwtUtils
+public class JwtService(IConfiguration configuration) : IJwtService
 {
-    private readonly IConfiguration _configuration;
-
-    public JwtUtils(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    private readonly IConfiguration _configuration = configuration;
 
     public string GenerateToken(User user, UserRoleEnums role = UserRoleEnums.Admin)
     {

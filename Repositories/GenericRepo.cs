@@ -33,7 +33,7 @@ public abstract class GenericRepo<T>(DatabaseContext dbContext) : IGenericRepo<T
         return await this.table.Where(filter).ToListAsync();
     }
 
-    public async Task<T?> GetById(int id)
+    public async Task<T?> GetByIdAsync(int id)
     {
        return await this.table.FindAsync(id);
     }

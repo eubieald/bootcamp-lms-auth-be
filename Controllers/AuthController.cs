@@ -1,10 +1,9 @@
 ﻿using lms_auth_be.ActionFilters;
 using lms_auth_be.Data;
 using lms_auth_be.DTOs;
+using lms_auth_be.Enums;
 using lms_auth_be.Interfaces;
 using lms_auth_be.Mapper;
-using lms_auth_be.Repositories;
-using lms_auth_be.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,34 +13,27 @@ namespace lms_auth_be.Controllers;
 [ApiController]
 public class AuthController(
     IUsersRepo usersRepo,
-    AdminRepo adminsRepo,
-    TeacherRepo teachersRepo,
-    StudentRepo studentsRepo,
-    SaltHashUtils saltHashUtils,
-    JwtUtils jwtUtils
+    IRoleManagerService roleManager,
+    ISaltHashService saltHashUtils,
+    IJwtService jwtUtils
 ) : ControllerBase
 {
-    private readonly IUsersRepo usersRepo = usersRepo;
-    private readonly AdminRepo adminsRepo = adminsRepo;
-    private readonly TeacherRepo teachersRepo = teachersRepo;
-    private readonly StudentRepo studentsRepo = studentsRepo;
-    private readonly SaltHashUtils saltHashUtils = saltHashUtils;
-    private readonly JwtUtils jwtUtils = jwtUtils;
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginAuthDtos loginDto)
     {
-        var user = await this.usersRepo.GetByEmail(loginDto.Email);
+        var user = await usersRepo.GetByEmail(loginDto.Email);
         if (user == null)
             return Unauthorized(new { message = "Invalid username or password." });
 
-        bool isValid = this.saltHashUtils.VerifyPassword(loginDto.Password, user.PasswordHash, user.PasswordSalt);
+        bool isValid = saltHashUtils.VerifyPassword(loginDto.Password, user.PasswordHash, user.PasswordSalt);
         if (!isValid)
             return Unauthorized(new { message = "Invalid username or password." });
 
+        var roles = await roleManager.GetRolesAsync(user.Id);
+
         var token = jwtUtils.GenerateToken(user);
 
-        var userDto = user.ToDto();
+        var userDto = user.ToDto(roles.Select(r => r.ToString()));
 
         Response.Cookies.Append("Authorization", token, new CookieOptions
         {
@@ -70,11 +62,11 @@ public class AuthController(
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var existingUser = await this.usersRepo.GetByEmail(registerDto.Email);
+        var existingUser = await usersRepo.GetByEmail(registerDto.Email);
         if (existingUser != null)
             return BadRequest(new { message = "Email already exists." });
 
-        var (hash, salt) = this.saltHashUtils.HashPassword(registerDto.Password);
+        var (hash, salt) = saltHashUtils.HashPassword(registerDto.Password);
 
         var user = new User
         {
@@ -86,36 +78,41 @@ public class AuthController(
             DateTimeCreated = DateTime.Now
         };
 
-        await this.usersRepo.CreateAsync(user);
+        await usersRepo.CreateAsync(user);
+
+        List<string> roles = [];
 
         if (admin)
         {
-            await this.adminsRepo.CreateAsync(new Admin
+            await roleManager.AdminRepo.CreateAsync(new Admin
             {
                 User = user,
                 DateTimeCreated = DateTime.Now
             });
+            roles.Add(UserRoleEnums.Admin.ToString());
         }
 
         if (teacher)
         {
-            await this.teachersRepo.CreateAsync(new Teacher
+            await roleManager.TeacherRepo.CreateAsync(new Teacher
             {
                 User = user,
                 DateTimeCreated = DateTime.Now
             });
+            roles.Add(UserRoleEnums.Teacher.ToString());
         }
 
 
         if((!admin && !teacher) || student)
         {
-            await this.studentsRepo.CreateAsync(new Student
+            await roleManager.StudentRepo.CreateAsync(new Student
             {
                 User = user,
                 DateTimeCreated = DateTime.Now
             });
+            roles.Add(UserRoleEnums.Student.ToString());
         }
 
-        return CreatedAtAction(nameof(Register), new { user.Email }, user.ToDto());
+        return CreatedAtAction(nameof(Register), new { user.Email }, user.ToDto(roles));
     }
 }

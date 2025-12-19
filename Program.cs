@@ -1,6 +1,5 @@
 ﻿using lms_auth_be;
 using lms_auth_be.DBContext;
-using lms_auth_be.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -65,6 +64,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddRepositories();
 
 // =======================================
+// 💡 Add Scoped Services
+// =======================================
+builder.Services.AddServices();
+
+// =======================================
 // 🔐 Configure JWT Authentication
 // =======================================
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -97,16 +101,10 @@ builder.Services.AddAuthentication(options =>
             {
                 context.Token = context.Request.Cookies["Authorization"];
             }
-            return System.Threading.Tasks.Task.CompletedTask;
+            return Task.CompletedTask;
         }
     };
 });
-
-// =======================================
-// 💡 Add Scoped Services
-// =======================================
-builder.Services.AddScoped<SaltHashUtils>();
-builder.Services.AddScoped<JwtUtils>();
 
 // =======================================
 // 🚀 Build the App
